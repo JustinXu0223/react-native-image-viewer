@@ -20,7 +20,7 @@ forked from ascoders/react-native-image-viewer(https://github.com/ascoders/react
 ### Installation
 
 ```bash
-yarn add react-native-image-zoom-viewer
+yarn add http://gitlab.novata.net:10080/justin/react-native-image-viewer.git
 ```
 
 ### Basic Usage
