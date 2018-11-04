@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { View, Modal, TouchableNativeFeedback, Text } from 'react-native';
-import ImageViewer from './built/index';
+import { View, Modal } from 'react-native';
+import ImageViewer from './build/index';
 
 const images = [
   {

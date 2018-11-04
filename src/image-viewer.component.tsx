@@ -2,18 +2,9 @@ import * as React from 'react';
 
 import {
   Animated,
-  CameraRoll,
-  Dimensions,
   I18nManager,
   Image,
-  PanResponder,
-  Platform,
-  Text,
-  TouchableHighlight,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-  ViewStyle
+  View
 } from 'react-native';
 import ImageZoom from 'react-native-image-pan-zoom';
 import styles from './image-viewer.style';
@@ -367,32 +358,24 @@ export default class ImageViewer extends React.Component<Props, State> {
    * 长按
    */
   public handleLongPress = (image: IImageInfo) => {
-    if (this.props.saveToLocalByLongPress) {
-      // 出现保存到本地的操作框
-      this.setState({ isShowMenu: true });
-    }
-
-    if (this.props.onLongPress) {
-      this.props.onLongPress(image);
-    }
+    const { onLongPress } = this.props;
+    onLongPress && onLongPress(image);
   };
 
   /**
    * 单击
    */
   public handleClick = () => {
-    if (this.props.onClick) {
-      this.props.onClick(this.handleCancel, this.state.currentShowIndex);
-    }
+    const { onClick } = this.props;
+    onClick && onClick(this.handleCancel, this.state.currentShowIndex);
   };
 
   /**
    * 双击
    */
   public handleDoubleClick = () => {
-    if (this.props.onDoubleClick) {
-      this.props.onDoubleClick(this.handleCancel);
-    }
+    const { onDoubleClick } = this.props;
+    onDoubleClick && onDoubleClick(this.handleCancel);
   };
 
   /**
@@ -400,9 +383,8 @@ export default class ImageViewer extends React.Component<Props, State> {
    */
   public handleCancel = () => {
     this.hasLayout = false;
-    if (this.props.onCancel) {
-      this.props.onCancel();
-    }
+    const { onCancel } = this.props;
+    onCancel && onCancel();
   };
 
   /**
@@ -422,10 +404,16 @@ export default class ImageViewer extends React.Component<Props, State> {
     }
   };
 
+  public handleSwipeDown = () => {
+    const { onSwipeDown } = this.props;
+    onSwipeDown && onSwipeDown();
+    this.handleCancel();
+  };
+
   /**
    * 获得整体内容
    */
-  public getContent() {
+  public renderContent() {
     // 获得屏幕宽高
     const screenWidth = this.width;
     const screenHeight = this.height;
@@ -573,109 +561,28 @@ export default class ImageViewer extends React.Component<Props, State> {
     });
 
     return (
-      <Animated.View style={{ zIndex: 9 }}>
-        <Animated.View style={{ ...this.styles.container, opacity: this.fadeAnim }}>
-          {this!.props!.renderHeader!(this.state.currentShowIndex)}
+      <Animated.View style={{ ...this.styles.container, opacity: this.fadeAnim }}>
+        <View style={this.styles.headerStyle}>
+          {this!.props!.renderHeader!((this.state.currentShowIndex || 0) + 1, this.props.imageUrls.length)}
+        </View>
 
-          <View style={this.styles.arrowLeftContainer}>
-            <TouchableWithoutFeedback onPress={this.goBack}>
-              <View>{this!.props!.renderArrowLeft!()}</View>
-            </TouchableWithoutFeedback>
-          </View>
-
-          <View style={this.styles.arrowRightContainer}>
-            <TouchableWithoutFeedback onPress={this.goNext}>
-              <View>{this!.props!.renderArrowRight!()}</View>
-            </TouchableWithoutFeedback>
-          </View>
-
-          <Animated.View
-            style={{
-              ...this.styles.moveBox,
-              transform: [{ translateX: this.positionX }],
-              width: this.width * this.props.imageUrls.length
-            }}
-          >
-            {ImageElements}
-          </Animated.View>
-          {this!.props!.renderIndicator!((this.state.currentShowIndex || 0) + 1, this.props.imageUrls.length)}
-
-          {this.props.imageUrls[this.state.currentShowIndex || 0] &&
-            this.props.imageUrls[this.state.currentShowIndex || 0].originSizeKb &&
-            this.props.imageUrls[this.state.currentShowIndex || 0].originUrl && (
-              <View style={this.styles.watchOrigin}>
-                <TouchableOpacity style={this.styles.watchOriginTouchable}>
-                  <Text style={this.styles.watchOriginText}>查看原图(2M)</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-          <View style={[{ bottom: 0, position: 'absolute', zIndex: 9 }, this.props.footerContainerStyle]}>
-            {this!.props!.renderFooter!(this.state.currentShowIndex)}
-          </View>
+        <Animated.View
+          style={{
+            ...this.styles.moveBox,
+            transform: [{ translateX: this.positionX }],
+            width: this.width * this.props.imageUrls.length
+          }}
+        >
+          {ImageElements}
         </Animated.View>
+        <View style={this.styles.footerStyle}>
+          {this!.props!.renderFooter!((this.state.currentShowIndex || 0) + 1, this.props.imageUrls.length)}
+        </View>
       </Animated.View>
     );
   }
 
-  /**
-   * 保存当前图片到本地相册
-   */
-  public saveToLocal = () => {
-    if (!this.props.onSave) {
-      CameraRoll.saveToCameraRoll(this.props.imageUrls[this.state.currentShowIndex || 0].url);
-      this!.props!.onSaveToCamera!(this.state.currentShowIndex);
-    } else {
-      this.props.onSave(this.props.imageUrls[this.state.currentShowIndex || 0].url);
-    }
-
-    this.setState({ isShowMenu: false });
-  };
-
-  public getMenu() {
-    if (!this.state.isShowMenu) {
-      return null;
-    }
-
-    return (
-      <View style={this.styles.menuContainer}>
-        <View style={this.styles.menuShadow} />
-        <View style={this.styles.menuContent}>
-          <TouchableHighlight underlayColor="#F2F2F2" onPress={this.saveToLocal} style={this.styles.operateContainer}>
-            <Text style={this.styles.operateText}>{this.props.menuContext.saveToLocal}</Text>
-          </TouchableHighlight>
-          <TouchableHighlight
-            underlayColor="#F2F2F2"
-            onPress={this.handleLeaveMenu}
-            style={this.styles.operateContainer}
-          >
-            <Text style={this.styles.operateText}>{this.props.menuContext.cancel}</Text>
-          </TouchableHighlight>
-        </View>
-      </View>
-    );
-  }
-
-  public handleLeaveMenu = () => {
-    this.setState({ isShowMenu: false });
-  };
-
-  public handleSwipeDown = () => {
-    if (this.props.onSwipeDown) {
-      this.props.onSwipeDown();
-    }
-    this.handleCancel();
-  };
-
   public render() {
-    let childs: React.ReactElement<any> = null as any;
-
-    childs = (
-      <View>
-        {this.getContent()}
-        {this.getMenu()}
-      </View>
-    );
-
     return (
       <View
         onLayout={this.handleLayout}
@@ -685,7 +592,7 @@ export default class ImageViewer extends React.Component<Props, State> {
           ...this.props.style
         }}
       >
-        {childs}
+        {this.renderContent()}
       </View>
     );
   }

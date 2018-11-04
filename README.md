@@ -14,10 +14,13 @@
 
 ## Getting Started
 
+```
+forked from ascoders/react-native-image-viewer(https://github.com/ascoders/react-native-image-viewer)
+```
 ### Installation
 
 ```bash
-npm i react-native-image-zoom-viewer --save
+yarn add react-native-image-zoom-viewer
 ```
 
 ### Basic Usage
