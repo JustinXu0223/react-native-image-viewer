@@ -20,7 +20,7 @@ forked from ascoders/react-native-image-viewer(https://github.com/ascoders/react
 ### Installation
 
 ```bash
-yarn add (git address)
+yarn add js-react-native-image-zoom-viewer
 ```
 
 ### Basic Usage
@@ -41,7 +41,7 @@ $ create-react-native-app AwesomeProject
 
 ```typescript
 import { Modal } from 'react-native';
-import ImageViewer from 'react-native-image-zoom-viewer';
+import ImageViewer from 'js-react-native-image-zoom-viewer';
 
 const images = [{
     // Simplest usage.
