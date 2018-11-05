@@ -410,6 +410,12 @@ export default class ImageViewer extends React.Component<Props, State> {
     this.handleCancel();
   };
 
+  public handleSwipeUp = () => {
+    const { onSwipeUp } = this.props;
+    onSwipeUp && onSwipeUp();
+    this.handleCancel();
+  };
+
   /**
    * 获得整体内容
    */
@@ -460,7 +466,11 @@ export default class ImageViewer extends React.Component<Props, State> {
           onClick={this.handleClick}
           onDoubleClick={this.handleDoubleClick}
           enableSwipeDown={this.props.enableSwipeDown}
+          swipeDownThreshold={this.props.swipeDownThreshold}
           onSwipeDown={this.handleSwipeDown}
+          enableSwipeUp={this.props.enableSwipeUp}
+          swipeUpThreshold={this.props.swipeUpThreshold}
+          onSwipeUp={this.handleSwipeUp}
           pinchToZoom={this.props.enableImageZoom}
           enableDoubleClickZoom={this.props.enableImageZoom}
           doubleClickInterval={this.props.doubleClickInterval}
@@ -529,7 +539,11 @@ export default class ImageViewer extends React.Component<Props, State> {
               imageWidth={width}
               imageHeight={height}
               enableSwipeDown={this.props.enableSwipeDown}
+              swipeDownThreshold={this.props.swipeDownThreshold}
               onSwipeDown={this.handleSwipeDown}
+              enableSwipeUp={this.props.enableSwipeUp}
+              swipeUpThreshold={this.props.swipeUpThreshold}
+              onSwipeUp={this.handleSwipeUp}
               pinchToZoom={this.props.enableImageZoom}
               enableDoubleClickZoom={this.props.enableImageZoom}
               doubleClickInterval={this.props.doubleClickInterval}

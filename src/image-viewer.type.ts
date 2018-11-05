@@ -55,6 +55,16 @@ export class Props {
    */
   public enableSwipeDown?: boolean = false;
 
+  public swipeDownThreshold?: number = 230;
+
+  /**
+   * Enable swipe up to close image viewer.
+   * When swipe down, will trigger onCancel.
+   */
+  public enableSwipeUp?: boolean = false;
+
+  public swipeUpThreshold?: number = 230;
+
   public doubleClickInterval?: number;
 
   /**
@@ -127,6 +137,13 @@ export class Props {
    * function that fires when user swipes down
    */
   public onSwipeDown?: () => void = () => {
+    //
+  };
+
+  /**
+   * function that fires when user swipes up
+   */
+  public onSwipeUp?: () => void = () => {
     //
   };
 

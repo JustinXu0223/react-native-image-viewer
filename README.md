@@ -20,7 +20,7 @@ forked from ascoders/react-native-image-viewer(https://github.com/ascoders/react
 ### Installation
 
 ```bash
-yarn add http://gitlab.novata.net:10080/justin/react-native-image-viewer.git
+yarn add (git address)
 ```
 
 ### Basic Usage
