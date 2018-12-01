@@ -24,6 +24,6 @@ export default (
     },
     operateText: { color: '#333' },
     loadingTouchable: { width, height },
-    loadingContainer: { justifyContent: 'center', alignItems: 'center' },
+    loadingContainer: { justifyContent: 'center', alignItems: 'center', flex: 1 },
   };
 };
