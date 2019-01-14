@@ -65,7 +65,7 @@ export class Props {
 
   public swipeUpThreshold?: number = 230;
 
-  public doubleClickInterval?: number;
+  public doubleClickInterval?: number = 275;
 
   /**
    * 是否预加载图片
